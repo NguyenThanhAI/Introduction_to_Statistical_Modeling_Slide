@@ -24,11 +24,13 @@ drawings:
 
 # Nhập môn mô hình hóa thống kê
 ## Nhóm 2
-## Chương 11
+## Chương 11: Dữ liệu liên tục dương: Phân phối Gamma <br/>
+## và phân phối Inverse Gaussian GLMs
 Thành viên: - Nguyễn Chí Thanh
             - Đoàn Đại Thanh Long
             - Nguyễn Hữu Tuấn Nghĩa
             - Nguyễn Mạnh Linh
+
 
 <style>
 h1 {
@@ -93,9 +95,8 @@ h1 {
 |11.4 bàn luận về phân phối Inverse Gaussian|Thanh|
 |11.5 Lựa chọn link function cho các phân phối trên|Linh|
 |11.6 Ước lượng $\phi$ của các phân phối|Linh
-|11.7 trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2)|
+|11.7 trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2 và Case Study bổ sung)|
 |11.8 tổng hợp một số hàm trong R để fit GLM với hai phân phối Gamma và Inverse Gaussian|Nghĩa|
-|11.9 Tổng kết| Nghĩa|
 
 ---
 
@@ -312,6 +313,10 @@ $$U(\hat{\beta}_0)=\dfrac{1}{\phi}\sum_{i=1}^n \dfrac{w_i}{V(\mu_i)\Big(\dfrac{d
 
 $$U(\hat{\beta}_0)=\dfrac{1}{\phi}\sum_{i=1}^n \dfrac{w_i}{\hat{\mu}_i^2\Big(\dfrac{1}{\hat{\mu}_i}\Big)^2}\dfrac{y_i - \hat{\mu}_i}{\hat{\mu}_i}=\dfrac{1}{\phi}\sum_{i=1}^n\dfrac{w_i(y_i - \hat{\mu}_i)}{\hat{\mu}_i}=0$$
 
+<style>
+  .katex{font-size: 0.95em;}
+</style>
+
 ---
 
 # 11.3 Phân phối Gamma
@@ -338,7 +343,7 @@ $$\Gamma(1 / \phi) \approx \sqrt{2\pi \phi}\Bigg(\dfrac{1}{\phi e}\Bigg)^{1/\phi
 
 $$\mathcal{P}\big(y;\mu,\phi\big)\approx\Bigg(\dfrac{y}{\phi}\Bigg)^{1/\phi}\dfrac{1}{y\sqrt{2\pi \phi}\Bigg(\dfrac{1}{\phi e}\Bigg)^{1/\phi}}\Bigg(\dfrac{1}{e}\Bigg)^{1/\phi}y^{-1/\phi}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)\\=\dfrac{1}{\sqrt{2\pi\phi y^2}}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)=\dfrac{1}{\sqrt{2\pi\phi V(y)}}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)=\tilde{\mathcal{P}}(y;\mu, \phi)$$
 
-- $\phi$ không biết trước được ước lượng ở mục 11.6 và được kiểm định likelihood ratio test dựa F-tests
+- $\phi$ không biết trước được ước lượng ở mục 11.6
 
 ---
 layout: two-cols
@@ -412,7 +417,7 @@ $$\mathcal{P}(y;\mu,\phi)=\dfrac{1}{\sqrt{2\pi y^3\phi}}\exp\Big\lbrace -\dfrac{
 
 $\Rightarrow$ Hàm độ lệch đơn vị $d(y, \mu)$ tuân theo phân phối $\chi_1^2$
 
-- $\phi$ không biết trước được ước lượng ở mục 11.6 và được kiểm định likelihood ratio test dựa F-tests
+- $\phi$ không biết trước được ước lượng ở mục 11.6
 
 <style>
   .katex{font-size: 0.9em;}
@@ -487,6 +492,10 @@ Trong đó
 
 `Origin` là nguồn gốc của cây: `Coppice`, `Natural` và `Planted`
 
+<style>  
+  p{ font-size: 14px; 
+      line-height: 80%;}
+</style>
 
 ---
 
@@ -754,6 +763,33 @@ c("Gamma:"=AIC(lime.log), "inv. Gauss.:"=AIC(lime.iG))
 
 Ta nhận thấy rằng mô hình gamma GLM tốt hơn so với inverse Gaussian GLM
 
+
+---
+
+# 11.7 Case Study 
+
+## 11.7.1 Case Study 1
+
+### Dataset Perm
+Cung cấp dữ liệu về mức độ thẩm thấu của 3 tấm vật liệu trên 3 loại máy khác nhau, thí nghiệm được tiến hành trong 9 ngày trên 81 tấm, mỗi tấm có độ dày như nhau.
+
+<img src = "images/Long/1.PNG" width="500" height="400">
+
+
+---
+
+# 11.7 Case Study
+
+## 11.7.1 Case Study 1
+
+- Giả định các vật thể trôi qua các tấm vật liệu là đồng nhất.
+- Đây là dữ liệu liên tục dương
+- Các chuyển động của các vật thể trên là các chuyển động ngẫu nhiên trong không khí theo thời gian $\Rightarrow$ Chuyển động Brown
+$\Rightarrow$ Sử dụng phân phối Inverse Gaussian cho bài toán
+
+- Model: Inverse Gaussian
+- Link Funtion: Logarit
+
 ---
 layout: two-cols
 ---
@@ -783,12 +819,17 @@ $$\frac{1}{\mu} = \beta_0 + \beta_1 x + \beta_2 \Bigg( \frac{1}{x} \Bigg)=\eta$$
 - Inverse Gaussian GLMs được biểu diễn trong R bằng cách sử dụng hàm glm(family= inverse.gaussian)
 - Link function `inverse`, `identity`, "log" có thể được sử dụng cho cả Gamma GLMs và Inverse Gaussian GLMs. Ngoài ra, Inverse Gaussian GLMs còn có thể sử dụng link function `1/mu^2`
 
+---
+
+# Link slide
+
+- https://github.com/NguyenThanhAI/Introduction_to_Statistical_Modeling_Slide
 
 ---
 
 # PHỤ LỤC
 
-- Chứng minh công thức độ lệch phần dư trang 436:
+- Chứng minh công thức ước lượng $\phi$ bằng MLE `(11.3)` của phân phối Gamma trang 436:
 
 $$\mathcal{P}\big(y;\mu,\phi\big)=\Bigg(\dfrac{y}{\phi \mu} \Bigg)^{1/\phi}\dfrac{1}{y}\exp\Bigg(-\dfrac{y}{\phi\mu}\Bigg)\dfrac{1}{\Gamma(1/\phi)}$$
 
@@ -820,7 +861,7 @@ $$\Rightarrow D(y_i, \hat{\mu}_i)=2\sum_{i=1}^n -w_i\log(\phi) + w_i\log(w_i) - 
 
 # PHỤ LỤC
 
-- Chứng minh công thức trang 439:
+- Chứng minh công thức ước lượng $\phi$ bằng MLE của phân phối Inverse Gaussian trang 439:
 
 $$\hat{\phi}=\dfrac{D(y, \hat{\mu})}{n}$$
 
