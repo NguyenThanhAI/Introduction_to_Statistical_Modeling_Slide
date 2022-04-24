@@ -853,7 +853,7 @@ $$\Rightarrow -w_i \log\Bigg(\dfrac{y_i}{\mu_i}\Bigg) + w_i \dfrac{y_i - \mu_i}{
 
 $$\Rightarrow 2\Bigg\lbrace-w_i \log\Bigg(\dfrac{y_i}{\mu_i}\Bigg) + w_i \dfrac{y_i - \mu_i}{\mu_i}\Bigg\rbrace=2 \Bigg \lbrace -w_i\log(\phi) + w_i\log(w_i) - w_i\dfrac{\Gamma'(w_i/\phi)}{\Gamma(w_i/\phi)} \Bigg \rbrace$$
 
-$$\Rightarrow d(y_i, \mu_i)=2 \Bigg \lbrace -w_i\log(\phi) + w_i\log(w_i) - w_i\dfrac{\Gamma'(w_i/\phi)}{\Gamma(w_i/\phi)} \Bigg \rbrace$$
+$$\Rightarrow w_id(y_i, \mu_i)=2 \Bigg \lbrace -w_i\log(\phi) + w_i\log(w_i) - w_i\dfrac{\Gamma'(w_i/\phi)}{\Gamma(w_i/\phi)} \Bigg \rbrace$$
 
 $$\Rightarrow D(y_i, \hat{\mu}_i)=2\sum_{i=1}^n -w_i\log(\phi) + w_i\log(w_i) - w_i\dfrac{\Gamma'(w_i/\phi)}{\Gamma(w_i/\phi)}$$
 
