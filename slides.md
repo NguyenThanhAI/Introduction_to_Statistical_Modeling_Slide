@@ -327,7 +327,7 @@ nếu điều kiện xấp xỉ hàm yên ngựa được thỏa mãn. Đối v�
 - Xét:
 $$\mathcal{P}\big(y;\mu,\phi\big)=\Bigg(\dfrac{y}{\phi}\Bigg)^{1/\phi}\dfrac{1}{y\Gamma(1/\phi)}\exp\Bigg(-\dfrac{y}{\phi\mu} - \dfrac{1}{\phi}\log \mu\Bigg)\\=\Bigg(\dfrac{y}{\phi}\Bigg)^{1/\phi}\dfrac{1}{y\Gamma(1/\phi)}\exp\Big(\dfrac{t(y, y)}{\phi}\Big)\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)\\=\Bigg(\dfrac{y}{\phi}\Bigg)^{1/\phi}\dfrac{1}{y\Gamma(1/\phi)}\exp\Big(\dfrac{-1 - \log y}{\phi}\Big)\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)$$
 
-- Khi $\phi \leq 1/3$:
+- Khi $\phi \leq 1/3$: Theo công thức xấp xỉ Stirling:
 
 $$\Gamma(1 / \phi) \approx \sqrt{2\pi \phi}\Bigg(\dfrac{1}{\phi e}\Bigg)^{1/\phi}$$
 
@@ -482,6 +482,12 @@ library(GLMsData); data(lime); str(lime)
  $ Origin : Factor w/ 3 levels "Coppice","Natural",..: 2 2 2 2 2 2 2 2 2 2 ...
 ```
 
+---
+
+# 11.5 Link Function
+
+- Ví dụ 1:
+
 Trong đó
 
 `Foliage` là khối lượng tán lá tính bằng `kg`
@@ -491,11 +497,6 @@ Trong đó
 `Age` là tuổi cây tính bằng năm
 
 `Origin` là nguồn gốc của cây: `Coppice`, `Natural` và `Planted`
-
-<style>  
-  p{ font-size: 14px; 
-      line-height: 80%;}
-</style>
 
 ---
 
