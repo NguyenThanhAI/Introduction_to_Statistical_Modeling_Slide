@@ -56,6 +56,7 @@ h1 {
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
+  -font-size: 20px;
 }
 </style>
 
@@ -95,8 +96,8 @@ h1 {
 |11.4 bàn luận về phân phối Inverse Gaussian|Thanh|
 |11.5 Lựa chọn link function cho các phân phối trên|Linh|
 |11.6 Ước lượng $\phi$ của các phân phối|Linh
-|11.7 trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2 và Case Study bổ sung)|
-|11.8 tổng hợp một số hàm trong R để fit GLM với hai phân phối Gamma và Inverse Gaussian|Nghĩa|
+|11.7 Trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2 và Case Study bổ sung)|
+|11.8 Tổng hợp một số hàm trong R để fit GLM với hai phân phối Gamma và Inverse Gaussian|Nghĩa|
 
 ---
 
@@ -766,30 +767,110 @@ Ta nhận thấy rằng mô hình gamma GLM tốt hơn so với inverse Gaussian
 
 
 ---
+layout: two-cols
+---
 
 # 11.7 Case Study 
 
-## 11.7.1 Case Study 1
+# 11.7.1: Case Study 1:
 
-### Dataset Perm
-Cung cấp dữ liệu về mức độ thẩm thấu của 3 tấm vật liệu trên 3 loại máy khác nhau, thí nghiệm được tiến hành trong 9 ngày trên 81 tấm, mỗi tấm có độ dày như nhau.
+- Dataset perm cho ta biết mức độ thấm (thẩm thấu) của 3 loại tấm vật liệu khác khau có độ dày như nhau.
 
-<img src = "images/Long/1.PNG" width="500" height="400">
+<img src = "images/Long/1.PNG" width="400" height="300">
 
+::right::
+
+- Trong đó: 
+  - A là mức độ thấm của vật liệu trên máy A
+  - B là mức độ thấm của vật liệu trên máy B
+  - C là mức độ thấm của vật liệu trên máy C
+  - 1 - 9: các ngày kiểm chứng perm của các tấm vật liệu.
+
+- Giả sử các phân tử thấm qua các tấm vật liệu là đồng nhất, mức độ thấm (permeability) là 1 đại lượng liên tục dương.
+- Chuyển động của các phân tử trong không khí là một chuyển động ngẫu nhiên theo thời gian. Đây là chuyển động Brown
+$\Rightarrow$ Lựa chọn mô hình Inverse Gaussian với link funtion là hàm Log cho bài toán
 
 ---
 
-# 11.7 Case Study
+# 11.7 Case Study 
 
-## 11.7.1 Case Study 1
+# 11.7.1: Case Study 1:
 
-- Giả định các vật thể trôi qua các tấm vật liệu là đồng nhất.
-- Đây là dữ liệu liên tục dương
-- Các chuyển động của các vật thể trên là các chuyển động ngẫu nhiên trong không khí theo thời gian $\Rightarrow$ Chuyển động Brown
-$\Rightarrow$ Sử dụng phân phối Inverse Gaussian cho bài toán
+- Dựng biểu đồ cho dữ liệu trên, ta thấy phương sai tăng dần theo giá trị trung bình và xuất hiện các giá trị outlier tiềm ẩn:
 
-- Model: Inverse Gaussian
-- Link Funtion: Logarit
+<img src = "images/Long/2.PNG" width="450" height="360">
+
+---
+layout: two-cols
+---
+
+# 11.7 Case Study 
+
+# 11.7.1: Case Study 1:
+
+- Sử dụng model Inverse Gauusian và kiểm định Anova cho dữ liệu:
+<img src = "images/Long/3.PNG">
+
+- Ta thấy biến ```day``` có pvalue lớn hơn 0.05, ảnh hưởng không đáng kể đến mô hình, vì vậy ta có thể loại bỏ ```day``` ra khỏi mô hình.
+
+::right::
+
+- Ước lượng tham số phân tán $\phi$ cho mô hình, ta được:
+<img src = "images/Long/4.PNG">
+- Lại có tham số phân tán phi $\phi < 1/3$: Điều kiện xấp xỉ yên ngựa được thỏa mãn
+
+---
+
+# 11.7 Case Study 
+
+# 11.7.1: Case Study 1:
+
+## Tính goodness of fit tests:
+- Sử dụng Gof để kiểm định liệu mô hình đã đủ các biế vgiải thích để biểu diễn xu hướng của dữ liệu hay chưa (kiểm định tính đầy đủ của mô hình).
+- Hàm độ lệch đơn vị của iG tuân theo phân phối chisq.
+$\Rightarrow$ Sử dụng 2 phương pháp kiểm định Goodness of Fit deviance và pearson với giả thiết H0: mô hình hiện tại gần sát với mô hình bão hòa; và đối thiết H1: Mô hình hiện tại khác với mô hình bão hòa
+
+---
+
+# 11.7 Case Study 
+
+# 11.7.1: Case Study 1:
+
+## Tính Goodness of Fit tests
+- Kết quả:
+<img src = "images/Long/6.PNG" width="500" height="400">
+- Kết luận: Các kiểm định Deviance và Pearson đều chấp nhận H0 => Mô hình Iverse Gaussian phù hợp với dữ liệu
+
+---
+layout: two-cols
+---
+
+# 11.7 Case Study 
+
+# 11.7.1: Case Study 1:
+
+- Các tham số ước lượng của mô hình:
+<img src = "images/Long/5.PNG" >
+
+::right::
+
+Mô hình cho thấy:
+- Kiểm định wald test cho thấy p-value của machB <0.05 => biến giải thích đóng góp tốt cho mô hình 
+- Permeability của vật liệu trên máy B bằng 0.5278 so với máy A (mức tham chiếu).
+- Tương tự ```perm``` của vật liệu trên máy C bằng 0.84113 so với máy A.
+
+$\Rightarrow$ Vật liệu trên máy C tương tự với máy A; vật liệu trên máy B khác biệt so với 2 máy còn lại.
+
+---
+
+# 11.7 Case Study 
+
+# 11.7.1: Case Study 1:
+
+## Kiểm tra các điểm outliers trong mô hình
+- Ta có thể kiểm tra mô hình được trang bị để xác định xem liệu quan sát lớn được xác định trong Hình 2 có phải là outliers hay không và có ảnh hưởng đến mô hình hay hay không.
+<img src = "images/Long/7.PNG" width="500" height="400">
+- Kết luận: Không có phần dư nào xuất hiện quá lớn. Không có quan sát nào có ảnh hưởng theo Cook distance
 
 ---
 layout: two-cols
@@ -801,7 +882,11 @@ layout: two-cols
 
 - Dataset yieldden cho ta biết năng suất của 3 loại hành tây khác khau
 
-<img src = "images/Nghia/1.PNG">
+<img src = "images/Nghia/1.PNG" width="300" height="200">
+
+- Trong đó: 
+  - Yield là năng suất của 1 cây, tính theo gam
+  - Density là mật độ cây trên 1 feet vuông, ký hiệu số cây/feet vuông
 
 ::right::
 
@@ -811,6 +896,46 @@ $$\mathrm{E}\lbrack z \rbrack = \frac{1}{\beta_2 + \beta_0 x + \beta_1 x^2}$$
 $$\mu = \mathrm{E} \lbrack y \rbrack = x \mathrm{E} \lbrack z \rbrack = \frac{x}{\beta_2 + \beta_0 x + \beta_1 x^2}$$
 - Lấy nghịch đảo:
 $$\frac{1}{\mu} = \beta_0 + \beta_1 x + \beta_2 \Bigg( \frac{1}{x} \Bigg)=\eta$$
+
+---
+layout: two-cols
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Biểu dồ thể hiện mối liên hệ giữa ba biến Năng suất, Mật độ và Năng suất/Mật độ:
+
+<img src = "images/Nghia/2.PNG" width="400" height="300">
+
+::right::
+
+<img src = "images/Nghia/3.PNG" width="400" height="300">
+
+- Từ biều đồ, ta thấy, khi mật độ tăng, thì sản lượng của 1 cây hành tây sẽ giảm nhưng sản lượng của toàn bộ đơn vị diện tích hành tây sẽ tăng lên
+=> ta sẽ sử dụng Gamma GLM với link function là inverse để tính toán
+
+---
+layout: two-cols
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Hàm gamma GLM:
+<img src = "images/Nghia/4.PNG" width="400" height="300">
+
+- Ta thấy vẫn còn nhiều biến có pvalue lớn hơn 0.05, không đống góp nhiều cho mô hình, nên sử dụng hàm update để loại bỏ các biến đó
+
+::right::
+
+- Sau khi update ta được:
+<img src = "images/Nghia/5.PNG" width="400" height="300">
+
+- p-value của Wald test đều nhỏ hơn 0.05 => các biến giải thích đóng góp tốt cho mô hình
+- Lại có tham số phân tán phi = 0.004789151 < 1/3: Điều kiện xấp xỉ yên ngựa được thỏa mãn
 
 ---
 
