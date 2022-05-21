@@ -174,7 +174,7 @@ layout: two-cols
 
 <img src="images/hist_Foliage.png" width="300" height="200">
 
-- Historgram của Foliage có dạng phân phối mũ
+- Historgram của Foliage có dạng phân phối mũ (là trường hợp đặc biệt của phân phối Gamma)
 
 <style>
   p {
@@ -356,7 +356,10 @@ $$\Gamma(1 / \phi) \approx \sqrt{2\pi \phi}\Bigg(\dfrac{1}{\phi e}\Bigg)^{1/\phi
 
 $$\mathcal{P}\big(y;\mu,\phi\big)\approx\Bigg(\dfrac{y}{\phi}\Bigg)^{1/\phi}\dfrac{1}{y\sqrt{2\pi \phi}\Bigg(\dfrac{1}{\phi e}\Bigg)^{1/\phi}}\Bigg(\dfrac{1}{e}\Bigg)^{1/\phi}y^{-1/\phi}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)\\=\dfrac{1}{\sqrt{2\pi\phi y^2}}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)=\dfrac{1}{\sqrt{2\pi\phi V(y)}}\exp\Bigg(-\dfrac{d(y, \mu)}{2\phi}\Bigg)=\tilde{\mathcal{P}}(y;\mu, \phi)$$
 
-- $\phi$ không biết trước được ước lượng ở mục 11.6
+- $\phi$ ít khi biết trước, khi $\phi$ không biết sẽ được ước lượng ở mục 11.6
+- Hai trường hợp đặc biệt $\phi$ biết trước:
+  - Xét một biến ngẫu nhiên $y$ tuân theo phân phối chuẩn, phương sai mẫu sẽ tuân theo phân phối $\chi^2$ tương ứng với phân phối Gamma với $\phi=2$
+  - Dữ liệu tuân theo phân phối mũ tương ứng với phân phối Gamma với $\phi=1$
 
 ---
 layout: two-cols
