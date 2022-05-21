@@ -157,9 +157,8 @@ layout: two-cols
 
 # 11.2 Mô hình hóa dữ liệu liên tục dương
 
-<img src="images/lime.png" width="400" height="350">
+<img src="images/lime.png" width="250" height="200">
 
-::right::
 
 - Biến phản hồi (khối lượng tán lá) luôn luôn dương
 
@@ -167,8 +166,19 @@ layout: two-cols
 
 - Có mối liên hệ giữa khối lượng tán lá và DBH, khối lượng tán lá và tuổi
 
-
 - Không có sự khác nhau nhiều về dữ liệu khối lượng tán lá theo nguồn gốc cây
+
+::right::
+
+<img src="images/hist_Foliage.png" width="300" height="200">
+
+- Historgram của Foliage có dạng phân phối mũ
+
+<style>
+  p {
+  font-size: 12px;
+}
+</style>
 
 ---
 
@@ -817,7 +827,6 @@ layout: two-cols
 
 - Ước lượng tham số phân tán $\phi$ cho mô hình, ta được:
 <img src = "images/Long/4.PNG">
-- Lại có tham số phân tán phi $\phi < 1/3$: Điều kiện xấp xỉ yên ngựa được thỏa mãn
 
 ---
 
