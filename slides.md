@@ -99,6 +99,7 @@ h1 {
 |11.6 Ước lượng $\phi$ của các phân phối|Linh
 |11.7 Trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2)|
 |11.8 Tổng hợp một số hàm trong R để fit GLM với hai phân phối Gamma và Inverse Gaussian|Nghĩa|
+|PHỤ LỤC|Thanh|
 
 ---
 
@@ -783,7 +784,7 @@ layout: two-cols
 
 # 11.7 Case Study 
 
-# 11.7.1: Case Study 1:
+## 11.7.1: Case Study 1:
 
 - Dataset perm cho ta biết mức độ thấm (thẩm thấu) của 3 loại tấm vật liệu khác khau có độ dày như nhau.
 
@@ -805,51 +806,154 @@ $\Rightarrow$ Lựa chọn mô hình Inverse Gaussian với link funtion là hà
 
 # 11.7 Case Study 
 
-# 11.7.1: Case Study 1:
+## 11.7.1: Case Study 1:
 
 - Dựng biểu đồ cho dữ liệu trên, ta thấy phương sai tăng dần theo giá trị trung bình và xuất hiện các giá trị outlier tiềm ẩn:
 
 <img src = "images/Long/2.PNG" width="450" height="360">
 
 ---
+
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Sử dụng model Inverse Gauusian:
+```python
+perm.log <- glm( Perm ~ Mach * Day, data=perm,family=inverse.gaussian(link="log") )
+```
+
+- Ta tính Goodness of fit test cho mô hình:
+
+```python
+gof.dev <- deviance(perm.log)
+gof.pearson <- sum(perm.log$weights * perm.log$residuals^2)
+
+pchisq(gof.dev, df=df.residual(perm.log), lower.tail = FALSE)
+pchisq(gof.pearson, df=df.residual(perm.log), lower.tail = FALSE)
+
+```
+```python
+1
+1
+```
+- Cả deviance Goodness of fit test và Pearson Goodness of fit test đều thể hiện mô hình khớp với dữ liệu
+
+---
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Ta phân tích mức độ dáng kể của các biến giải thích trong mô hình:
+
+```python
+round( anova( perm.log, test="F"), 3)
+```
+
+<img src = "images/Long/3.PNG" width="400" height="300">
+
+Ta thấy thành phần tương tác giữa ```Mach``` và ```Day``` không cần thiết trong mô hình. Ta sẽ học lại mô hình không có tương tác giữa hai biến giải thích ```Mach``` và ```Day```
+
+
+---
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Ta fit lại mô hình:
+
+```python
+perm.log <- update( perm.log, Perm ~ Mach)
+```
+
+- Ta tính Goodness of fit test cho mô hình:
+
+```python
+gof.dev <- deviance(perm.log)
+gof.pearson <- sum(perm.log$weights * perm.log$residuals^2)
+
+pchisq(gof.dev, df=df.residual(perm.log), lower.tail = FALSE)
+pchisq(gof.pearson, df=df.residual(perm.log), lower.tail = FALSE)
+```
+
+```python
+1
+1
+```
+- Cả deviance Goodness of fit test và Pearson Goodness of fit test đều thể hiện mô hình khớp với dữ liệu
+
+
+---
+
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Các tham số của mô hình:
+
+```python
+coef(summary(perm.log))
+```
+<img src = "images/Long/4.PNG" width="400" height="300">
+
+- Test anova cho các tham số của mô hình:
+
+```python
+round( anova( perm.log, test="F"), 3)
+```
+
+<img src = "images/Long/5.PNG" width="400" height="300">
+
+- Các biến giải thích đóng góp đáng kể trong mô hình
+
+
+---
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Ta chẩn đoán mô hình:
+
+```python
+par(mfrow=c(3, 3))
+
+scatter.smooth(rstandard(perm.log) ~ 1/sqrt(fitted(perm.log)))
+#plot(rstandard(perm.log) ~ perm$Day)
+plot(rstandard(perm.log) ~ perm$Mach)
+z <- resid(perm.log, type="working") + perm.log$linear.predictor
+scatter.smooth(z ~ perm.log$linear.predictor)
+qqnorm(qr1 <- qresid(perm.log))
+qqline(qr1)
+plot(cooks.distance(perm.log), type="h")
+```
+
+---
 layout: two-cols
 ---
 
 # 11.7 Case Study 
 
-# 11.7.1: Case Study 1:
+## 11.7.1: Case Study 1:
 
-- Sử dụng model Inverse Gauusian và kiểm định Anova cho dữ liệu:
-<img src = "images/Long/3.PNG">
+- Các hình vẽ chẩn đoán:
 
-- Ta thấy biến ```day``` có pvalue lớn hơn 0.05, ảnh hưởng không đáng kể đến mô hình, vì vậy ta có thể loại bỏ ```day``` ra khỏi mô hình.
+<img src = "images/Long/6.PNG" width="400" height="300">
 
 ::right::
 
-- Ước lượng tham số phân tán $\phi$ cho mô hình, ta được:
-<img src = "images/Long/4.PNG">
+- Ta thấy phương sai gần như không đổi so với $\hat{\mu}$ trên thang constant-information.
 
----
+- Độ lệch deviance chuẩn hóa không có nhiều sự khác biệt giữa các mức của biến giải thích ```Mach```
 
-# 11.7 Case Study 
+- $z$ quan hệ gần như tuyến tính với $\eta$
 
-# 11.7.1: Case Study 1:
+- Phần dư quantile khá sát với phân bố chuẩn
 
-## Tính goodness of fit tests:
-- Sử dụng Gof để kiểm định liệu mô hình đã đủ các biế vgiải thích để biểu diễn xu hướng của dữ liệu hay chưa (kiểm định tính đầy đủ của mô hình).
-- Hàm độ lệch đơn vị của iG tuân theo phân phối chisq.
-$\Rightarrow$ Sử dụng 2 phương pháp kiểm định Goodness of Fit deviance và pearson với giả thiết H0: mô hình hiện tại gần sát với mô hình bão hòa; và đối thiết H1: Mô hình hiện tại khác với mô hình bão hòa
-
----
-
-# 11.7 Case Study 
-
-# 11.7.1: Case Study 1:
-
-## Tính Goodness of Fit tests
-- Kết quả:
-<img src = "images/Long/6.PNG" width="500" height="400">
-- Kết luận: Các kiểm định Deviance và Pearson đều chấp nhận H0 => Mô hình Iverse Gaussian phù hợp với dữ liệu
 
 ---
 layout: two-cols
@@ -857,30 +961,37 @@ layout: two-cols
 
 # 11.7 Case Study 
 
-# 11.7.1: Case Study 1:
+## 11.7.1: Case Study 1:
 
-- Các tham số ước lượng của mô hình:
-<img src = "images/Long/5.PNG" >
+- Ta xét đến các điểm ảnh hưởng:
+
+```python
+colSums(influence.measures(perm.log)$is.inf)
+```
+
+```python
+dfb.1_
+0
+dfb.MchB
+0
+dfb.MchC
+0
+dffit
+0
+cov.r
+2
+cook.d
+0
+hat
+0
+```
 
 ::right::
 
-Mô hình cho thấy:
-- Kiểm định wald test cho thấy p-value của machB <0.05 => biến giải thích đóng góp tốt cho mô hình 
-- Permeability của vật liệu trên máy B bằng 0.5278 so với máy A (mức tham chiếu).
-- Tương tự ```perm``` của vật liệu trên máy C bằng 0.84113 so với máy A.
+- Ta thấy không có điểm ảnh hưởng theo Cook distance
 
-$\Rightarrow$ Vật liệu trên máy C tương tự với máy A; vật liệu trên máy B khác biệt so với 2 máy còn lại.
+$\Rightarrow$ Mô hình được fit là một mô hình tốt.
 
----
-
-# 11.7 Case Study 
-
-# 11.7.1: Case Study 1:
-
-## Kiểm tra các điểm outliers trong mô hình
-- Ta có thể kiểm tra mô hình được trang bị để xác định xem liệu quan sát lớn được xác định trong Hình 2 có phải là outliers hay không và có ảnh hưởng đến mô hình hay hay không.
-<img src = "images/Long/7.PNG" width="500" height="400">
-- Kết luận: Không có phần dư nào xuất hiện quá lớn. Không có quan sát nào có ảnh hưởng theo Cook distance
 
 ---
 layout: two-cols
@@ -927,6 +1038,180 @@ layout: two-cols
 => ta sẽ sử dụng Gamma GLM với link function là inverse để tính toán
 
 ---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta sử dụng model Gamma GLM:
+
+```python
+yd.glm.int <- glm( YD ~ (Dens + I(1/Dens)) * factor(Var),
+family=Gamma(link=inverse), data=yieldden )
+```
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta tính Goodness of fit test:
+
+```python
+gof.dev <- deviance(yd.glm.int)
+gof.pearson <- sum(yd.glm.int$weights * yd.glm.int$residuals^2)
+
+phi.md <- gof.dev / df.residual(yd.glm.int)
+phi.pearson <- gof.pearson / df.residual(yd.glm.int)
+
+phi.md
+phi.pearson
+
+pchisq(gof.dev, df=df.residual(yd.glm.int), lower.tail = FALSE)
+pchisq(gof.pearson, df=df.residual(yd.glm.int), lower.tail = FALSE)
+```
+
+```python
+0.00524221631013727
+0.00523620877715005
+1
+1
+```
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Cả $\phi$ tính theo thống kê deviance và thống kê Pearson đều rất nhỏ $\Rightarrow$ Điều kiện xấp xỉ yên ngựa và định lý giới hạn trung tâm thỏa mãn. Cả deviance Goodness of fit test và Pearson Goodness of fit test đều thể hiện mô hình khớp với dữ liệu
+
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta phân tích ANOVA cho mô hình:
+
+```python
+round( anova( yd.glm.int, test="F"), 2)
+```
+
+<img src = "images/Nghia/4.PNG" width="400" height="300">
+
+- Ta thấy vẫn còn nhiều biến có p-value lớn hơn 0.05, không đống góp nhiều cho mô hình, nên sử dụng hàm update để loại bỏ các biến đó
+
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+
+- Ta update lại mô hình:
+
+
+```python
+yd.glm <- update( yd.glm.int, . ~ Dens + I(1/Dens) + factor(Var) )
+```
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+
+- Ta tính Goodness of fit test cho mô hình mới:
+
+```python
+gof.dev <- deviance(yd.glm)
+gof.pearson <- sum(yd.glm$weights * yd.glm$residuals^2)
+
+phi.md <- gof.dev / df.residual(yd.glm)
+phi.pearson <- gof.pearson / df.residual(yd.glm)
+
+phi.md
+phi.pearson
+
+pchisq(gof.dev, df=df.residual(yd.glm), lower.tail = FALSE)
+pchisq(gof.pearson, df=df.residual(yd.glm), lower.tail = FALSE)
+```
+```python
+0.00486649352544807
+0.00478915091850439
+1
+1
+```
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Cả $\phi$ tính theo thống kê deviance và thống kê Pearson đều rất nhỏ $\Rightarrow$ Điều kiện xấp xỉ yên ngựa và định lý giới hạn trung tâm thỏa mãn. Cả deviance Goodness of fit test và Pearson Goodness of fit test đều thể hiện mô hình khớp với dữ liệu
+
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta phân tích Wald test cho mô hình mới:
+
+```python
+coef(summary(yd.glm))
+```
+
+<img src = "images/Nghia/5.PNG" width="400" height="300">
+
+
+- p-value của Wald test đều nhỏ hơn 0.05 $\Rightarrow$ các biến giải thích đóng góp tốt cho mô hình
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta phân tích ANOVA cho mô hình mới:
+
+```python
+round( anova(yd.glm, test="F"), 2)
+```
+
+<img src = "images/Nghia/6.PNG" width="400" height="300">
+
+- p-value của tất cả các biến giải thích đều nhỏ hơn 0.05. Các biến giải thích đóng góp tốt cho mô hình
+
+---
+
+# 11.7 Case Study
+
+## 11.7.2 Case Study 2
+
+- Ta chẩn đoán mô hình:
+
+```python
+par(mfrow=c(3, 3))
+
+scatter.smooth(rstandard(yd.glm) ~ log(fitted(yd.glm)))
+scatter.smooth(rstandard(yd.glm) ~ yieldden$Dens)
+plot(rstandard(yd.glm) ~ factor(yieldden$Var))
+z <- resid(yd.glm, type="working") + yd.glm$linear.predictor
+scatter.smooth(z ~ yd.glm$linear.predictor)
+qqnorm(qr1 <- qresid(yd.glm))
+qqline(qr1)
+plot(cooks.distance(yd.glm), type="h")
+```
+
+---
 layout: two-cols
 ---
 
@@ -934,18 +1219,61 @@ layout: two-cols
 
 ## 11.7.2 Case Study 2
 
-- Hàm gamma GLM:
-<img src = "images/Nghia/4.PNG" width="400" height="300">
+- Các hình vẽ chẩn đoán:
 
-- Ta thấy vẫn còn nhiều biến có pvalue lớn hơn 0.05, không đống góp nhiều cho mô hình, nên sử dụng hàm update để loại bỏ các biến đó
+<img src = "images/Nghia/7.PNG" width="400" height="300">
 
 ::right::
 
-- Sau khi update ta được:
-<img src = "images/Nghia/5.PNG" width="400" height="300">
+- Ta thấy phương sai gần như không đổi so với $\hat{\mu}$ trên thang constant-information.
 
-- p-value của Wald test đều nhỏ hơn 0.05 => các biến giải thích đóng góp tốt cho mô hình
-- Lại có tham số phân tán phi = 0.004789151 < 1/3: Điều kiện xấp xỉ yên ngựa được thỏa mãn
+- Độ lệch deviance chuẩn hóa không có nhiều sự khác biệt giữa các mức của biến giải thích ```Mach```
+
+- $z$ quan hệ gần như tuyến tính với $\eta$
+
+- Phần dư quantile khá sát với phân bố chuẩn
+
+---
+layout: two-cols
+---
+
+# 11.7 Case Study 
+
+## 11.7.1: Case Study 1:
+
+- Ta xét đến các điểm ảnh hưởng:
+
+```python
+colSums(influence.measures(yd.glm)$is.inf)
+```
+
+```python
+dfb.1_
+0
+dfb.Dens
+0
+dfb.I(1/
+0
+dfb.f(V)2
+0
+dfb.f(V)3
+0
+dffit
+0
+cov.r
+2
+cook.d
+0
+hat
+0
+```
+
+::right::
+
+- Ta thấy không có điểm ảnh hưởng theo Cook distance
+
+$\Rightarrow$ Mô hình được fit là một mô hình tốt.
+
 
 ---
 
@@ -960,6 +1288,13 @@ layout: two-cols
 # Link slide
 
 - https://github.com/NguyenThanhAI/Introduction_to_Statistical_Modeling_Slide
+
+---
+
+# TÀI LIỆU THAM KHẢO
+
+1. Dunn, Peter K., and Gordon K. Smyth. Generalized linear models with examples in R. New York: Springer, 2018.
+2. Almudevar, Anthony. Theory of Statistical Inference. Chapman and Hall/CRC, 2021.
 
 ---
 
