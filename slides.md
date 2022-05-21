@@ -22,7 +22,8 @@ drawings:
   persist: true
 ---
 
-# Nhập môn mô hình hóa thống kê
+# Nhập môn mô hình hóa 
+# thống kê
 ## Nhóm 2
 ## Chương 11: Dữ liệu liên tục dương: Phân phối Gamma <br/>
 ## và phân phối Inverse Gaussian GLMs
@@ -96,7 +97,7 @@ h1 {
 |11.4 bàn luận về phân phối Inverse Gaussian|Thanh|
 |11.5 Lựa chọn link function cho các phân phối trên|Linh|
 |11.6 Ước lượng $\phi$ của các phân phối|Linh
-|11.7 Trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2 và Case Study bổ sung)|
+|11.7 Trình bày một số Case Study|Long (Case Study 1) - Nghĩa (Case Study 2)|
 |11.8 Tổng hợp một số hàm trong R để fit GLM với hai phân phối Gamma và Inverse Gaussian|Nghĩa|
 
 ---
